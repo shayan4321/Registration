@@ -4,7 +4,7 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db.js");
-const registerRoute = require("./routes/registerRoute");
+const authRouter = require("./routes/AuthRouter");
 
 // configure env
 dotenv.config();
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use("/api", registerRoute);
+app.use("/api", authRouter);
 
 app.get("/", (req, res) => {
   res.send("<h1>Registration Form Using MERN</h1>");

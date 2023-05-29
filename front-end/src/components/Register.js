@@ -7,12 +7,9 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // console.log(username,email,password);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(username,email,password);
-    // toast.success('Register Successfully')
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_API}/api/register`,
