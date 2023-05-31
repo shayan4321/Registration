@@ -14,13 +14,16 @@ const register = async (req, res) => {
   } else if (!authHelper.isPasswordValid(password)) {
     return res.status(404).send({ message: "Password must contain atleast one uppercase, one lowercase and atleast 8 characters long" })
   } else {
-    if (!isUserAlreadyExists(email)) {
+    console.log("user exists:"+ isUserAlreadyExists(email))
+    const isUserExists = await isUserAlreadyExists(email)
+    if (isUserExists) {
       return res.status(400).send({
         success: false,
         message: "User already exists!"
       })
     } else {
       const user = addUser(username, email, password)
+      console.log("Add User:}" + user)
       if (user == null) {
         res.status(500).send({
           success: false,
@@ -56,13 +59,19 @@ async function addUser(username, email, password) {
 
 async function isUserAlreadyExists(userEmail) {
   try {
-    const user = await userModel.findOne({ email: userEmail })
-    console.log(user)
-    if (user == null) {
-      return false
-    } else {
-      return true
-    }
+    await userModel.findOne({email:userEmail}).then(async(user) => {
+      console.log(user);
+      if(user) {
+        return true
+      } else {
+        return false
+      }
+    }).catch(error => {
+      if(error) {
+        console.log(error)
+        return true
+      }
+    })
   } catch (error) {
     console.log(error)
     return true
